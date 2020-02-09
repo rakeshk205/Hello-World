@@ -1,0 +1,79 @@
+
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+pipeline {
+         agent any
+         stages {
+                 stage('One') {
+                 steps {
+                     echo 'Hi, this is Zulaikha from edureka'
+                 }
+                 }
+                 stage('Two') {
+                 steps {
+                    input('Do you want to proceed?')
+                 }
+                 }
+                 stage('Three') {
+                 when {
+                       not {
+                            branch "master"
+                       }
+                 }
+                 steps {
+                       echo "Hello"
+                 }
+                 }
+                 stage('Four') {
+                 parallel { 
+                            stage('Unit Test') {
+                           steps {
+                                echo "Running the unit test..."
+                           }
+                           }
+                            stage('Integration test') {
+                              agent {
+                                    docker {
+                                            reuseNode true
+                                            image 'ubuntu'
+                                           }
+                                    }
+                              steps {
+                                echo "Running the integration test..."
+                              }
+                           }
+                           }
+                           }
+              }
+}
